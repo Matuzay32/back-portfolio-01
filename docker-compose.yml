@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  web:
+    container_name: portfolio-back
+    restart: always
+    build: .
+    ports:
+      - '4000:3000'
+    links:
+      - mongo
+    volumes:
+      - ./uploads:/home/app/uploads
+  mongo:
+    container_name: portfolioDB
+    image: mongo
+    ports:
+      - '27017:27017'
+    logging:
+      driver: 'none'
