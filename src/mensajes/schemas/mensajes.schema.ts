@@ -9,10 +9,10 @@ export class Mensaje {
   name: string;
 
   @Prop({ required: true })
-  age: number;
+  email: string;
 
   @Prop({ required: true })
-  breed: string;
+  message: string;
 }
 
 export const MensajeSchema = SchemaFactory.createForClass(Mensaje);

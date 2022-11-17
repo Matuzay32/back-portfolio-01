@@ -7,14 +7,18 @@ import {
   Mensaje,
   MensajeDocument,
 } from './schemas/mensajes.schema';
-
+import { CreateMensaje } from './dto/mensaje.dto';
 @Injectable()
 export class MensajesService {
   constructor(
     @InjectModel(Mensaje.name) private mensajeModel: Model<MensajeDocument>,
   ) {}
 
-  mensajes(): mensajeInterface[] {
+  verMensajes(): mensajeInterface[] {
     return [{ name: 'npmbre', email: 'email.@gmail', message: 'mensaje' }];
+  }
+
+  async crearMensaje(dtoMensaje: CreateMensaje): Promise<any> {
+    return await this.mensajeModel.create(dtoMensaje);
   }
 }
