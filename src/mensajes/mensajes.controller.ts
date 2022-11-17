@@ -8,7 +8,7 @@ export class MensajesController {
   constructor(private readonly mensajesService: MensajesService) {}
 
   @Get()
-  getHello(): mensajeInterface[] {
+  getAllUsers(): Promise<mensajeInterface[]> {
     return this.mensajesService.verMensajes();
   }
 

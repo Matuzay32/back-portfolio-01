@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { mensajeInterface } from './interfaces/mensajes.interface';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -14,11 +14,25 @@ export class MensajesService {
     @InjectModel(Mensaje.name) private mensajeModel: Model<MensajeDocument>,
   ) {}
 
-  verMensajes(): mensajeInterface[] {
-    return [{ name: 'npmbre', email: 'email.@gmail', message: 'mensaje' }];
+  async verMensajes(): Promise<mensajeInterface[]> {
+    try {
+      return await this.mensajeModel.find();
+    } catch (error) {
+      throw new HttpException(
+        { error: 'No se pudieron encotrar los datos' },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async crearMensaje(dtoMensaje: CreateMensaje): Promise<any> {
-    return await this.mensajeModel.create(dtoMensaje);
+    try {
+      return await this.mensajeModel.create(dtoMensaje);
+    } catch (error) {
+      throw new HttpException(
+        { error: 'No se logro crear el mail' },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }
