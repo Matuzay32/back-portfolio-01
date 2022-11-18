@@ -37,11 +37,9 @@ export class MensajesService {
   }
 
   async mensajesPorfecha(query): Promise<mensajeInterface[]> {
-    const { fecha } = query;
+    const { sort } = query;
     try {
-      return await this.mensajeModel.find({
-        $or: [{ fecha: { $regex: fecha, $options: 'i' } }],
-      });
+      return await this.mensajeModel.find({}).sort({ fecha: sort });
     } catch (error) {
       throw new HttpException(
         {
