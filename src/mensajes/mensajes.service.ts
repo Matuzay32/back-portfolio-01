@@ -35,4 +35,18 @@ export class MensajesService {
       );
     }
   }
+
+  async mensajesPorfecha(query): Promise<mensajeInterface[]> {
+    const { fecha } = query;
+    try {
+      return await this.mensajeModel.find({
+        $or: [{ name: { $regex: fecha, $options: 'i' } }],
+      });
+    } catch (error) {
+      throw new HttpException(
+        { error: 'No se pudieron encontrar los datos' },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
 }

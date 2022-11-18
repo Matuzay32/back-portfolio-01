@@ -13,6 +13,9 @@ export class Mensaje {
 
   @Prop({ required: true })
   message: string;
+
+  @Prop({ type: Date, default: Date.now })
+  fecha: Date;
 }
 
 export const MensajeSchema = SchemaFactory.createForClass(Mensaje);
