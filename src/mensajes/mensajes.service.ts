@@ -40,12 +40,15 @@ export class MensajesService {
     const { fecha } = query;
     try {
       return await this.mensajeModel.find({
-        $or: [{ name: { $regex: fecha, $options: 'i' } }],
+        $or: [{ fecha: { $regex: fecha, $options: 'i' } }],
       });
     } catch (error) {
       throw new HttpException(
-        { error: 'No se pudieron encontrar los datos' },
-        HttpStatus.BAD_REQUEST,
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: `No se encontraron datos`,
+        },
+        HttpStatus.NOT_FOUND,
       );
     }
   }

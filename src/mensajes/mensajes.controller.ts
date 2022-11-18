@@ -17,7 +17,7 @@ export class MensajesController {
     return this.mensajesService.crearMensaje(createDto);
   }
 
-  @Get('/mensajes/fecha')
+  @Get()
   obtieneMensajesPorFecha(@Query() query): Promise<mensajeInterface[]> {
     return this.mensajesService.mensajesPorfecha(query);
   }
