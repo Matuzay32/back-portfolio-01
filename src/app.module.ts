@@ -1,10 +1,18 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MensajesModule } from './mensajes/mensajes.module';
+import { LoggerMiddleware } from './middleware/logger.middleware';
 import { UsersModule } from './users/users.module';
+import { MensajesController } from './mensajes/mensajes.controller';
+import { UsersController } from './users/users.controller';
 
 @Module({
   imports: [
@@ -15,4 +23,18 @@ import { UsersModule } from './users/users.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+
+// DESPUES TENGO QUE PROBARLO CON EL TOKEN
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .exclude(
+        { path: 'mensajes', method: RequestMethod.POST },
+        { path: 'users', method: RequestMethod.POST },
+      )
+      .forRoutes(MensajesController, UsersController);
+  }
+}
+
+// export class AppModule {}
