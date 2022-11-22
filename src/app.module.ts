@@ -8,8 +8,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MensajesModule } from './mensajes/mensajes.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
+import { MensajesModule } from './mensajes/mensajes.module';
 import { UsersModule } from './users/users.module';
 import { MensajesController } from './mensajes/mensajes.controller';
 import { UsersController } from './users/users.controller';
@@ -23,8 +23,6 @@ import { UsersController } from './users/users.controller';
   controllers: [AppController],
   providers: [AppService],
 })
-
-// DESPUES TENGO QUE PROBARLO CON EL TOKEN
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
@@ -36,5 +34,4 @@ export class AppModule implements NestModule {
       .forRoutes(MensajesController, UsersController);
   }
 }
-
 // export class AppModule {}
