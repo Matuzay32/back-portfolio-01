@@ -134,6 +134,7 @@ export class UsersService {
         };
 
         let { username, password, email, rol } = usuarioAdmin;
+
         const salt = await bcrypt.genSalt(10);
         const pass = await bcrypt.hash(password, salt);
 
