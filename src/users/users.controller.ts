@@ -55,10 +55,10 @@ export class UsersController {
   }
 
   //CREAR USUARIO
-  @Post()
-  createUser(@Body() createUserDto: CreateUserDto): Promise<UserInterface> {
-    return this.userService.createUser(createUserDto);
-  }
+  // @Post()
+  // createUser(@Body() createUserDto: CreateUserDto): Promise<UserInterface> {
+  //   return this.userService.createUser(createUserDto);
+  // }
 
   //LOGIN USUARIO
   @Post('/login')
