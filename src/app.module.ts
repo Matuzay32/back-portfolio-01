@@ -27,11 +27,8 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
-      .exclude(
-        { path: 'mensajes', method: RequestMethod.POST },
-        { path: 'users', method: RequestMethod.POST },
-      )
-      .forRoutes(MensajesController, UsersController);
+      .exclude({ path: 'mensajes', method: RequestMethod.POST })
+      .forRoutes('mensajes');
   }
 }
 // export class AppModule {}
