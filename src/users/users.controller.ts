@@ -56,7 +56,7 @@ export class UsersController {
 
   //CREAR USUARIO
   @Post()
-  createCar(@Body() createUserDto: CreateUserDto): Promise<UserInterface> {
+  createUser(@Body() createUserDto: CreateUserDto): Promise<UserInterface> {
     return this.userService.createUser(createUserDto);
   }
 
