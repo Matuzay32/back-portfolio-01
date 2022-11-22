@@ -36,17 +36,13 @@ export class MensajesService {
     }
   }
 
-  async mensajesPorfecha(query): Promise<mensajeInterface[]> {
-    const { sort } = query;
+  async borrarMensaje(id: string): Promise<any> {
     try {
-      return await this.mensajeModel.find({}).sort({ fecha: sort });
+      return await this.mensajeModel.findByIdAndDelete(id);
     } catch (error) {
       throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: `No se encontraron datos`,
-        },
-        HttpStatus.NOT_FOUND,
+        { error: `No se logro encontrar el mensaje con id ${id}` },
+        HttpStatus.BAD_REQUEST,
       );
     }
   }

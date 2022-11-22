@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { MensajesService } from './mensajes.service';
 import { mensajeInterface } from './interfaces/mensajes.interface';
 import { CreateMensaje } from './dto/mensaje.dto';
@@ -17,8 +25,8 @@ export class MensajesController {
     return this.mensajesService.crearMensaje(createDto);
   }
 
-  @Get()
-  obtieneMensajesPorFecha(@Query() query): Promise<mensajeInterface[]> {
-    return this.mensajesService.mensajesPorfecha(query);
+  @Delete('/:id')
+  borrarMesanje(@Param('id') id: string): Promise<mensajeInterface> {
+    return this.mensajesService.borrarMensaje(id);
   }
 }
