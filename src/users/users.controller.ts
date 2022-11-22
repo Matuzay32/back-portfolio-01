@@ -27,32 +27,26 @@ import { CreateUserDto } from './dto/users.dto';
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
-  //FIND ALL USERS
-  @Get('/findAll')
-  getAllUsers(@Query() query): Promise<UserInterface[]> {
-    return this.userService.getAllUsers(query);
+  //ENCONTRAR TODOS LOS USUARIOS
+  @Get()
+  getAllUsers(): Promise<UserInterface[]> {
+    return this.userService.getAllUsers();
   }
 
-  //FIND USER FOR NAME
-  @Get('/findAll/name')
-  getUsersWithName(@Query() query): Promise<UserInterface[]> {
-    return this.userService.getUsersWithName(query);
-  }
-
-  //FIND USER FOR ID
-  @Get('/findOneForId/:id')
+  //ENCONTRAR USUARIOS POR ID
+  @Get(':id')
   getOneUserforId(@Param('id') id: string): Promise<UserInterface> {
     return this.userService.getOneUserforId(id);
   }
 
-  //DELETE USER FOR ID
-  @Delete('/deleteOneForId/:id')
+  //BORRAR USUARIO POR ID
+  @Delete(':id')
   deleteOneUserforId(@Param('id') id: string): Promise<UserInterface> {
     return this.userService.deleteOneUserforId(id);
   }
 
-  //UPDATE USER FOR ID
-  @Put('/updateOneForId/:id')
+  //ACTUALIZAR USUARIO POR ID
+  @Put(':id')
   updateOneUserforId(
     @Param('id') id: string,
     @Body() createUserDto: CreateUserDto,
@@ -60,13 +54,13 @@ export class UsersController {
     return this.userService.updateOneUserforId(id, createUserDto);
   }
 
-  //CREATE USER
-  @Post('/createUser')
+  //CREAR USUARIO
+  @Post()
   createCar(@Body() createUserDto: CreateUserDto): Promise<UserInterface> {
     return this.userService.createUser(createUserDto);
   }
 
-  //LOGIN USER
+  //LOGIN USUARIO
   @Post('/login')
   loginUser(@Body() createUserDto: CreateUserDto): Promise<UserInterface> {
     return this.userService.loginUser(createUserDto);

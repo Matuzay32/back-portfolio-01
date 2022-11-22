@@ -13,17 +13,16 @@ import {
 import { CreateUserDto } from './dto/users.dto';
 import { UserInterface } from './interfaces/users.interface';
 import { TOKEN_SECRET } from './ENUMS/secret.enum';
+import { ADMIN } from './ENUMS/admin.enum';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectModel('Users') private userModel: Model<UserInterface>) {}
 
-  //FIND ALL USERS
-  async getAllUsers(query): Promise<UserInterface[]> {
-    const { limit, offset } = query;
-
+  //ENCONTRAR TODOS LOS USUARIOS
+  async getAllUsers(): Promise<UserInterface[]> {
     try {
-      return await this.userModel.find({}).limit(limit).skip(offset);
+      return await this.userModel.find({});
     } catch (error) {
       throw new HttpException(
         {
@@ -35,33 +34,7 @@ export class UsersService {
     }
   }
 
-  //FIND USER FOR NAME
-  async getUsersWithName(query): Promise<UserInterface[]> {
-    const { name, limit, offset, sort } = query;
-
-    try {
-      return await this.userModel
-        .find({
-          $or: [
-            { email: { $regex: name, $options: 'i' } },
-            { username: { $regex: name, $options: 'i' } },
-          ],
-        })
-        .limit(limit)
-        .sort({ price: sort })
-        .skip(offset);
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: `Users not found`,
-        },
-        HttpStatus.NOT_FOUND,
-      );
-    }
-  }
-
-  //FIND USER FOR ID
+  //ENCONTRAR USUARIO POR ID
   async getOneUserforId(id: string): Promise<UserInterface> {
     try {
       const found = await this.userModel.findById(id);
@@ -70,14 +43,14 @@ export class UsersService {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
-          error: `User with id ${id} does not exist`,
+          error: `El usuario con el ${id} no existe`,
         },
         HttpStatus.FORBIDDEN,
       );
     }
   }
 
-  //DELETE CAR FOR ID
+  //BORRAR USUARIO POR ID
   async deleteOneUserforId(id: string): Promise<UserInterface> {
     try {
       const found = await this.userModel.findByIdAndRemove(id);
@@ -86,32 +59,38 @@ export class UsersService {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
-          error: `User with id ${id} does not exist`,
+          error: `El usuario con el ${id} no existe`,
         },
         HttpStatus.NOT_FOUND,
       );
     }
   }
 
-  //UPDATE USER FOR ID
+  //ACTUALIZAR USUARIO POR ID
   async updateOneUserforId(
     id: string,
     userToUpdate: CreateUserDto,
   ): Promise<any> {
     try {
+      let { username, password, email, rol } = userToUpdate;
+      const salt = await bcrypt.genSalt(10);
+      password = await bcrypt.hash(password, salt);
+      userToUpdate = { username, password, email, rol };
+      console.log(userToUpdate);
+
       return await this.userModel.findByIdAndUpdate(id, userToUpdate);
     } catch (err) {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
-          error: `User with id ${id} does not exist`,
+          error: `El usuario con el ${id} no existe`,
         },
         HttpStatus.NOT_FOUND,
       );
     }
   }
 
-  //CREATE USER CON Bcrypt
+  //CREAR USUARIO CON BCRYPT
   async createUser(createUserDto: CreateUserDto): Promise<any> {
     let { username, password, email } = createUserDto;
     const salt = await bcrypt.genSalt(10);
@@ -120,7 +99,7 @@ export class UsersService {
       const found = await this.userModel.findOne({ email: email });
       if (found) {
         return {
-          thisUserIsRegistered: 'This user already exists',
+          usuarioExistente: 'El usuario ya existe',
         };
       } else if (!found) {
         const userCreated = await this.userModel.create({
@@ -142,17 +121,34 @@ export class UsersService {
     }
   }
 
-  //login
+  //LOGIN
   async loginUser(createUserDto: CreateUserDto): Promise<any> {
     try {
+      const foundAdmin = await this.userModel.findOne({ email: ADMIN.EMAIL });
+      if (!foundAdmin) {
+        const usuarioAdmin = {
+          username: ADMIN.USERNAME,
+          password: ADMIN.PASSWORD,
+          email: ADMIN.EMAIL,
+          rol: ADMIN.ROL,
+        };
+
+        let { username, password, email, rol } = usuarioAdmin;
+        const salt = await bcrypt.genSalt(10);
+        const pass = await bcrypt.hash(password, salt);
+
+        await this.userModel.create({ username, password: pass, email, rol });
+      }
+
       const { email, password, username } = createUserDto;
+
       const foundUser = await this.userModel.findOne({ email: email });
-      // console.log(foundUser);
       if (foundUser) {
         const validPassword = await bcrypt.compare(
           password,
           foundUser.password,
         );
+
         if (validPassword && foundUser.username == username) {
           //Genero el Token con los datos del usuario que vienen desde la base de datos
           const token = sign(
@@ -160,18 +156,22 @@ export class UsersService {
               username: foundUser.username,
               email: foundUser.email,
               _id: foundUser._id,
-              // role: foundUser.role,
+              rol: foundUser.rol,
             },
             TOKEN_SECRET.TOKEN_SECRET,
             { expiresIn: '1h' },
           );
 
-          return { message: 'You are now authenticated', token: token };
+          return {
+            mensaje: 'Usted esta autenticado',
+            token: token,
+            rol: foundUser.rol,
+          };
         } else {
-          return { error: 'Invalid Password or User' };
+          return { error: 'usuario o contraseña invalido' };
         }
       } else {
-        return { error: 'User does not exist' };
+        return { error: 'El usuario no existe' };
       }
     } catch (error) {}
   }
