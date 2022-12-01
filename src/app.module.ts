@@ -18,7 +18,9 @@ import { UsersController } from './users/users.controller';
   imports: [
     MensajesModule,
     UsersModule,
-    MongooseModule.forRoot('mongodb://mongo/portfolioDB'),
+    MongooseModule.forRoot(
+      'mongodb://eze:password@portfolioDB:27017/PortfolioDB?authSource=admin',
+    ),
   ],
   controllers: [AppController],
   providers: [AppService],
