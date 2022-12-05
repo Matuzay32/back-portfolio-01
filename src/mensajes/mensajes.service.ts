@@ -36,7 +36,7 @@ export class MensajesService {
     }
   }
 
-  async borrarMensaje(id: string): Promise<any> {
+  async borrarMensaje(id: string): Promise<mensajeInterface> {
     try {
       return await this.mensajeModel.findByIdAndDelete(id);
     } catch (error) {
