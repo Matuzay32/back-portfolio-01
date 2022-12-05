@@ -29,7 +29,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     // ),
 
     MongooseModule.forRoot(
-      'mongodb://mongo:wUKMUP52ikzhyJbvfVMO@containers-us-west-140.railway.app:5455/miapp?authSource=admin',
+      `mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASSWORD}@${process.env.MONGOHOST}:${process.env.MONGOPORT}/miapp?authSource=admin`,
     ),
   ],
   controllers: [AppController],
