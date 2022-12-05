@@ -20,13 +20,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     MensajesModule,
     UsersModule,
     ConfigModule.forRoot({ isGlobal: true }),
-    // MongooseModule.forRoot(
-    //   `mongodb://${process.env.DB_USER || 'eze'}:${
-    //     process.env.DB_PASSWORD || 'password'
-    //   }@${process.env.DB_HOST || 'portfolioDB:27017'}/${
-    //     process.env.DB_NAME || 'miapp'
-    //   }?authSource=admin`,
-    // ),
 
     MongooseModule.forRoot(
       `mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASSWORD}@${process.env.MONGOHOST}:${process.env.MONGOPORT}/miapp?authSource=admin`,
