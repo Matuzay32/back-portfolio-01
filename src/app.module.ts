@@ -32,7 +32,10 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
-      .exclude({ path: 'mensajes', method: RequestMethod.POST })
+      .exclude(
+        { path: 'mensajes', method: RequestMethod.POST },
+        { path: 'mensajes', method: RequestMethod.DELETE },
+      )
       .forRoutes('mensajes');
   }
   static port: number;
