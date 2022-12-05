@@ -19,7 +19,7 @@ import { UsersController } from './users/users.controller';
     MensajesModule,
     UsersModule,
     MongooseModule.forRoot(
-      'mongodb://eze:password@portfolioDB:27017/PortfolioDB?authSource=admin',
+      'mongodb://eze:password@portfolioDB:27017/miapp?authSource=admin',
     ),
   ],
   controllers: [AppController],
