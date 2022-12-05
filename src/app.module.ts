@@ -43,4 +43,5 @@ export class AppModule implements NestModule {
     AppModule.port = +this.configService.get('PORT');
   }
 }
+//por probarlo con la db
 // export class AppModule {}
