@@ -21,7 +21,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     UsersModule,
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(
-      'mongodb://eze:password@portfolioDB:27017/miapp?authSource=admin',
+      `mongodb://${process.env.DB_USER || 'eze'}:${
+        process.env.DB_PASSWORD || 'password'
+      }@${process.env.DB_HOST || 'portfolioDB:27017'}/${
+        process.env.DB_NAME || 'miapp'
+      }?authSource=admin`,
     ),
   ],
   controllers: [AppController],
