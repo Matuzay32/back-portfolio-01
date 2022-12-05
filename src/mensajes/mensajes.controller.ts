@@ -3,9 +3,11 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
   Post,
   Query,
+  Response,
 } from '@nestjs/common';
 import { MensajesService } from './mensajes.service';
 import { mensajeInterface } from './interfaces/mensajes.interface';
@@ -26,7 +28,8 @@ export class MensajesController {
   }
 
   @Delete('/:id')
-  borrarMesanje(@Param('id') id: string): Promise<mensajeInterface> {
-    return this.mensajesService.borrarMensaje(id);
+  deleteUser(@Param() param, @Response() res): Promise<mensajeInterface> {
+    const mensaje = this.mensajesService.borrarMensaje(param.id);
+    return res.status(HttpStatus.OK).json(mensaje);
   }
 }
