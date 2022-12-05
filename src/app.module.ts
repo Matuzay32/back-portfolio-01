@@ -13,11 +13,13 @@ import { MensajesModule } from './mensajes/mensajes.module';
 import { UsersModule } from './users/users.module';
 import { MensajesController } from './mensajes/mensajes.controller';
 import { UsersController } from './users/users.controller';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     MensajesModule,
     UsersModule,
+    ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(
       'mongodb://eze:password@portfolioDB:27017/miapp?authSource=admin',
     ),
@@ -31,6 +33,10 @@ export class AppModule implements NestModule {
       .apply(LoggerMiddleware)
       .exclude({ path: 'mensajes', method: RequestMethod.POST })
       .forRoutes('mensajes');
+  }
+  static port: number;
+  constructor(private readonly configService: ConfigService) {
+    AppModule.port = +this.configService.get('PORT');
   }
 }
 // export class AppModule {}
