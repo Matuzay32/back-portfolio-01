@@ -25,7 +25,7 @@ export class MensajesService {
     }
   }
 
-  async crearMensaje(dtoMensaje: CreateMensaje): Promise<any> {
+  async crearMensaje(dtoMensaje: CreateMensaje): Promise<mensajeInterface> {
     try {
       return await this.mensajeModel.create(dtoMensaje);
     } catch (error) {
