@@ -20,12 +20,16 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     MensajesModule,
     UsersModule,
     ConfigModule.forRoot({ isGlobal: true }),
+    // MongooseModule.forRoot(
+    //   `mongodb://${process.env.DB_USER || 'eze'}:${
+    //     process.env.DB_PASSWORD || 'password'
+    //   }@${process.env.DB_HOST || 'portfolioDB:27017'}/${
+    //     process.env.DB_NAME || 'miapp'
+    //   }?authSource=admin`,
+    // ),
+
     MongooseModule.forRoot(
-      `mongodb://${process.env.DB_USER || 'eze'}:${
-        process.env.DB_PASSWORD || 'password'
-      }@${process.env.DB_HOST || 'portfolioDB:27017'}/${
-        process.env.DB_NAME || 'miapp'
-      }?authSource=admin`,
+      'mongodb://mongo:wUKMUP52ikzhyJbvfVMO@containers-us-west-140.railway.app:5455/miapp?authSource=admin',
     ),
   ],
   controllers: [AppController],
